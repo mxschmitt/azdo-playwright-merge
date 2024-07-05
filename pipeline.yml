@@ -28,7 +28,7 @@ jobs:
     displayName: 'Install dependencies'
 
   - script: |
-      npx playwright install --with-deps
+      npx playwright install --with-deps chromium
     displayName: 'Install Playwright Browsers'
 
   - script: |
@@ -64,7 +64,14 @@ jobs:
 
   - task: DownloadPipelineArtifact@2
     inputs:
-      artifactName:
+      artifactName: 'blob-report-1'
+      targetPath: 'all-blob-reports'
+
+  - script: ls -la all-blob-reports
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      artifactName: 'blob-report-2'
       targetPath: 'all-blob-reports'
 
   
