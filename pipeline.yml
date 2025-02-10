@@ -14,4 +14,5 @@ jobs:
     ReleaseStatus: $[dependencies.Release.result]  # Note: no spaces and use [] not $()
   steps:
   - checkout: self
+  - script: echo "$[dependencies.Release.result]"
   - script: echo "$(ReleaseStatus)"
