@@ -10,11 +10,11 @@ jobs:
 - job: PostRelease
   condition: always()
   dependsOn: Release
+  variables:
+    ReleaseStatus: $[ dependencies.Release.status ]
   steps:
   - checkout: self
-  - script: |
-      echo "Release Result: $(dependencies.Release.result)"
-      echo "Release Status: $(dependencies.Release.status)"
+  - script: echo "Release Status: $(ReleaseStatus)
     displayName: 'dump dependencies'
   - script: |
       echo "Job Status Variables:"
