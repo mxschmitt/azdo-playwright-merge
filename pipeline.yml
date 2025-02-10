@@ -12,11 +12,12 @@ jobs:
   dependsOn: Release
   steps:
   - checkout: self
-  - script: echo "${{ convertToJson(variables) }}"
-    displayName: 'dump variables'
-  - script: echo "passed"
-    displayName: passed
-    condition: succeeded()
-  - script: echo "passed"
-    displayName: passed
-    condition: succeeded()
+  - script: |
+      echo "Release Result: $(dependencies.Release.result)"
+      echo "Release Status: $(dependencies.Release.status)"
+    displayName: 'dump dependencies'
+  - script: |
+      echo "Job Status Variables:"
+      echo "SYSTEM_JOBSTATUS: $(SYSTEM_JOBSTATUS)"
+      echo "AGENT_JOBSTATUS: $(AGENT_JOBSTATUS)"
+    displayName: 'dump job status'
