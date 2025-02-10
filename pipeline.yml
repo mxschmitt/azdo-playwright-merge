@@ -14,10 +14,5 @@ jobs:
     ReleaseStatus: $[ dependencies.Release.status ]
   steps:
   - checkout: self
-  - script: echo "Release Status: $(ReleaseStatus)
+  - script: echo "Release Status: $(ReleaseStatus)"
     displayName: 'dump dependencies'
-  - script: |
-      echo "Job Status Variables:"
-      echo "SYSTEM_JOBSTATUS: $(SYSTEM_JOBSTATUS)"
-      echo "AGENT_JOBSTATUS: $(AGENT_JOBSTATUS)"
-    displayName: 'dump job status'
