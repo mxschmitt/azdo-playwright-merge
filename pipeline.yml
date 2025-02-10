@@ -11,7 +11,7 @@ jobs:
   condition: always()
   dependsOn: Release
   variables:
-    ReleaseStatus: $[ dependencies.Release.status ]
+    ReleaseStatus: $[dependencies.Release.result]  # Note: no spaces and use [] not $()
   steps:
   - checkout: self
-  - script: echo $(ReleaseStatus)
+  - script: echo "$(ReleaseStatus)"
