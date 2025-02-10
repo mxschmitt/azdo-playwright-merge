@@ -1,87 +1,22 @@
 trigger:
 - main
-
 pool:
   vmImage: 'ubuntu-latest'
-
 jobs:
-- job: playwright_tests
-  displayName: 'Run Playwright Tests'
-  strategy:
-    matrix:
-      chromium-1:
-        project: Chrome
-        shardIndex: 1
-      chromium-2:
-        project: Chrome
-        shardIndex: 2
-
+- job: Release
   steps:
   - checkout: self
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '18'
-    displayName: 'Install Node.js'
-
-  - script: |
-      npm ci
-    displayName: 'Install dependencies'
-
-  - script: |
-      npx playwright install --with-deps chromium
-    displayName: 'Install Playwright Browsers'
-
-  - script: |
-      npx playwright test --project=$(project) --shard=$(shardIndex)/2
-    displayName: 'Run Playwright tests'
-    env:
-      CI: 'true'
-
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: 'blob-report'
-      artifactName: 'blob-report-$(shardIndex)'
-      publishLocation: 'pipeline'
-
-- job: merge_reports
-  displayName: 'Merge Reports into HTML'
-  dependsOn: playwright_tests
+  - script: exit 1
+- job: PostRelease
   condition: always()
-
-  pool:
-    vmImage: 'ubuntu-latest'
-
+  dependsOn: Release
   steps:
   - checkout: self
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '18'
-    displayName: 'Install Node.js'
-
-  - script: |
-      npm ci
-    displayName: 'Install dependencies'
-
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      artifactName: 'blob-report-1'
-      targetPath: 'all-blob-reports'
-
-  - script: ls -la all-blob-reports
-
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      artifactName: 'blob-report-2'
-      targetPath: 'all-blob-reports'
-
-  
-  - script: |
-      npx playwright merge-reports --reporter html ./all-blob-reports
-    displayName: 'Merge into HTML Report'
-
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: 'playwright-report'
-      artifactName: 'html-report-$(Build.BuildId)-attempt-$(System.JobAttempt)'
-      publishLocation: 'pipeline'
-      retention: '7'
+  - script: echo "${{ convertToJson(variables) }}"
+    displayName: 'dump variables'
+  - script: echo "passed"
+    displayName: passed
+    condition: succeeded()
+  - script: echo "passed"
+    displayName: passed
+    condition: succeeded()
